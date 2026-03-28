@@ -139,6 +139,16 @@ input:focus {
   background-color: #e74c3c;
 }
 
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #274881;
+  border-radius: 16px;
+  color: #fff;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+
 .App {
   text-align: center;
 }
