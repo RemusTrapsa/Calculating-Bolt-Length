@@ -2,6 +2,7 @@
   "name": "bolt-calc",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://remustrapsa.github.io/Calculating-Bolt-Length",
   "dependencies": {
     "@syncfusion/ej2-react-dropdowns": "^27.2.5",
     "@types/jest": "^29.5.14",

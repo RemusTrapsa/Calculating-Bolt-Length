@@ -1,5 +1,7 @@
 # Calculating Bolt Length
 
+**Live site:** https://remustrapsa.github.io/Calculating-Bolt-Length/
+
 A small React app that works out the bolt length you need for a joint. Enter the thickness and number of each part and washer, choose the bolt diameter, and the app adds an allowance for the nut and thread based on the diameter. It then rounds the total **up** to the next 1/4 inch.
 
 Your last 7 results are saved in the browser, so they're still there after a page refresh. You can delete a result and undo the delete.
