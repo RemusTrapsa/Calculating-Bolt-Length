@@ -1,25 +1,16 @@
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 import Bar from "./Bar";
 
 jest.mock("react-chartjs-2", () => ({
-  Line: () => null
+  Line: () => <div data-testid="line-chart" />
 }));
 
 describe("Bar component", () => {
-  let wrapper;
-  const prop = {
-    labelData: ["27/10/2019"],
-    bmiData: ["16.14"]
-  };
-
-  beforeEach(() => {
-    wrapper = mount(<Bar {...prop} />);
-  });
-
-  it("renders", () => {
-    expect(wrapper).not.toBeNull();
-
-    console.log(wrapper.debug());
+  it("renders the chart", () => {
+    const { getByTestId } = render(
+      <Bar labelData={["27/10/2019"]} bmiData={["2.50"]} />
+    );
+    expect(getByTestId("line-chart")).toBeInTheDocument();
   });
 });

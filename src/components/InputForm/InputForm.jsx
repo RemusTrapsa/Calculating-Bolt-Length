@@ -1,219 +1,95 @@
 import React, { useState } from 'react';
-//import { ComboBox } from 'react-widgets'
 import PropTypes from 'prop-types';
-//import { ComboBoxComponent } from '@syncfusion/ej2-react-dropdowns';
-import {Combobox} from '../Combobox'
-
-
-
-//import Dropdown from '../DropDown/Dropdown';
-//import Select from "react-dropdown-select";
 
 const initialValues = {
-	thickness1: '',
-	quantity1: '',
-	thickness2: '',
-	quantity2: '',
-	flatWasher: '0.16',
-	quantity3: '',
-	bevelWasher: '0.32',
-	quantity4: '',
-	date: '',
-    diameter : ''
-}
-
-
-
+  thickness1: '',
+  quantity1: '',
+  thickness2: '',
+  quantity2: '',
+  flatWasher: '0.16',
+  quantity3: '',
+  bevelWasher: '0.32',
+  quantity4: '',
+  date: '',
+  diameter: ''
+};
 
 const InputForm = ({ change }) => {
-	const [state, setState] = useState(initialValues);
+  const [state, setState] = useState(initialValues);
 
-	const handleChange = e => {
-		let { value, name } = e.target;
-		if (value > 999.75) {
-			value = 999.75;
-		}
-		const date = new Date().toLocaleString().split(',')[0];
+  const handleChange = (e) => {
+    let { value, name } = e.target;
 
-		setState({
-			...state,
-			[name]: value,
-			date
-		});
+    if (
+      ["thickness1", "quantity1", "thickness2", "quantity2", "flatWasher", "quantity3", "bevelWasher", "quantity4"].includes(name)
+      && Number(value) > 999.75
+    ) {
+      value = "999.75";
+    }
 
-	};
+    const date = new Date().toLocaleString().split(',')[0];
+    setState({ ...state, [name]: value, date });
+  };
 
-    //const [input, setInput] = useState('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    change(state);
+    setState(initialValues);
+  };
 
-	
+  return (
+    <form onSubmit={handleSubmit}>
+      <p>Thickness of part 1 (in inches)</p>
+      <input name="thickness1" value={state.thickness1} onChange={handleChange} />
 
+      <p>Quantity</p>
+      <input name="quantity1" value={state.quantity1} onChange={handleChange} />
 
-    //const [Combobox, setSelectedOption] = useState (0);
+      <p>Thickness of part 2 (in inches)</p>
+      <input name="thickness2" value={state.thickness2} onChange={handleChange} />
 
-    const [showUl, setShowUl] = useState(false);
+      <p>Quantity</p>
+      <input name="quantity2" value={state.quantity2} onChange={handleChange} />
 
-    //TURN INTO PROPS
-  
-  /*      const dataDiam = [
-            { id: 1, name: '1/2 inches' },
-            { id: 2, name: '5/8 inches' },
-            { id: 3, name: '3/4 inches' },
-        ] = useState('');*/
-    //end of props
+      <p>Flat washers 0.16 (in inches)</p>
+      <input name="flatWasher" value={state.flatWasher} onChange={handleChange} />
 
+      <p>Quantity</p>
+      <input name="quantity3" value={state.quantity3} onChange={handleChange} />
 
+      <p>Bevel washers 0.32 (in inches)</p>
+      <input name="bevelWasher" value={state.bevelWasher} onChange={handleChange} />
 
- 	
-	const handleSubmit = () => {
-		change(state);
-		setState(initialValues);
-	};
+      <p>Quantity</p>
+      <input name="quantity4" value={state.quantity4} onChange={handleChange} />
 
+      <p>Diameter (in inches)</p>
+      <select
+        name="diameter"
+        className="browser-default"
+        value={state.diameter}
+        onChange={handleChange}
+      >
+        <option value="">Select diameter</option>
+        <option value="1/2">1/2</option>
+        <option value="5/8">5/8</option>
+        <option value="3/4">3/4</option>
+        <option value="7/8">7/8</option>
+        <option value="1">1</option>
+      </select>
 
-	
-	return (
-		<>
-            {/*<div className="App"><br></br>
-                <label htmlFor="Diameter">Diameter  (in inches)</label><br></br>
-                <Combobox   placeholder="Choose a diameter:" data={diameter} onChange={(e)=>{setSelectedOption(e.value)}}></Combobox>
-                </div><div>
-                <br></br><br></br><br></br><br></br>
-                </div>  */}
-			<div className="App"><br></br><br></br></div>
-			<div className="row">
-				<div className="col m6 s12">
-					<label htmlFor="thickness1">Thickness of part 1  (in inches)</label>
-					<input
-						id="thickness1"
-						name="thickness1"
-						type="number"
-						min="0.00"
-						max="999.75"
-						placeholder="0.00"
-						value={state.thickness1}
-						onChange={handleChange}
-					/>
-				</div>
-				<div className="col m6 s12">
-					<label htmlFor="quantity1">quantity</label>
-					<input
-						id="quantity1"
-						name="quantity1"
-						type="number"
-						min="1"
-						max="10"
-						placeholder="1"
-						value={state.quantity1}
-						onChange={handleChange}
-					/>
-				</div>
-				</div>
-				<div className="App"><br></br><br></br></div>
-				<div className="row">
-				<div className="col m6 s12">
-					<label htmlFor="thickness2">Thickness of part 2  (in inches)</label>
-					<input
-						id="thickness2"
-						name="thickness2"
-						type="number"
-						min="0.00"
-						max="999.75"
-						placeholder="0.00"
-						value={state.thickness2}
-						onChange={handleChange}
-					/>
-				</div>
-				<div className="col m6 s12">
-					<label htmlFor="quantity2">quantity</label>
-					<input
-						id="quantity2"
-						name="quantity2"
-						type="number"
-						min="1"
-						max="10"
-						placeholder="1"
-						value={state.quantity2}
-						onChange={handleChange}
-					/>
-				</div>				
-			</div>
-			<div className="row"><br></br><br></br></div>
-			<div className="row">
-				<div className="col m6 s12">
-					<label htmlFor="flatWasher" value={state.flatWasher}>Flat washers 0.16  (in inches) </label>
-				</div>
-				<div className="col m6 s12">
-					<label htmlFor="quantity3">quantity</label>
-					<input
-						id="quantity3"
-						name="quantity3"
-						type="number"
-						min="1"
-						max="10"
-						placeholder="1"
-						value={state.quantity3}
-						onChange={handleChange}
-					/>
-				</div>
-				</div>
-
-			<div className="App"><br></br><br></br></div>
-			<div className="row">
-				<div className="col m6 s12">
-					<label htmlFor="bevelWasher" value={state.bevelWasher}>Bevel washers 0.32  (in inches) </label>
-				</div>
-				<div className="col m6 s12">
-					<label htmlFor="quantity4">quantity</label>
-					<input
-						id="quantity4"
-						name="quantity4"
-						type="number"
-						min="1"
-						max="10"
-						placeholder="1"
-						value={state.quantity4}
-						onChange={handleChange}
-					/>
-				</div>
-				</div>
-			<div className="App"><br></br><br></br></div>
-
-			<div className="center">
-				<div className="col m6 s12">
-					<label htmlFor="diameter">Diameter  (in inches)</label>
-					<input
-						id="diameter"
-						name="diameter"
-						type="string"
-						min="1/2"
-						max="1"
-						placeholder="1/2"
-						value={state.diameter}
-						onChange={handleChange}
-					/>
-				</div>
-				</div>
-
-			<div className="App"><br></br><br></br></div>
-				<div className="row"><br></br><br></br></div>
-			<div className="center">
-                <br></br>
-				<button
-					id="bmi-btn"
-					className="calculate-btn"
-					type="button"
-					disabled={state.thickness1 === '' || state.thickness2 === '' || state.quantity1 === '' || state.quantity2 === '' || state.diameter === ''}
-					onClick={handleSubmit}
-				>
-					Calculate Bolt length
-				</button>
-			</div>
-		</>
-	);
+      <br />
+      <br />
+      <button type="submit" className="btn">
+        Calculate Bolt Length
+      </button>
+    </form>
+  );
 };
 
 InputForm.propTypes = {
-	change: PropTypes.func.isRequired
+  change: PropTypes.func.isRequired
 };
 
 export default InputForm;
+

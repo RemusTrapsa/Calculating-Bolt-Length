@@ -1,44 +1,33 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Info from "./Info";
 
 describe("Info Component", () => {
-  let wrapper;
   const props = {
-    weight: "50",
-    height: "176",
+    diameter: "3/4",
+    thickness1: "1.5",
+    thickness2: "0.75",
     id: "2b926f1b-db1f-45ac-af87-2130da1e1a2f",
     date: "10/25/2019",
-    bmi: "16.14",
+    length: "3.50",
     deleteCard: jest.fn()
   };
-  beforeEach(() => {
-    wrapper = shallow(<Info {...props} />);
-  });
 
-  it("renders", () => {
-    expect(wrapper).not.toBeNull();
+  beforeEach(() => {
+    props.deleteCard.mockClear();
+    render(<Info {...props} />);
   });
 
   it("renders with props", () => {
-    expect(wrapper.find("[data-test='bmi']").text()).toEqual("BMI: 16.14");
-
-    expect(wrapper.find("[data-test='weight']").text()).toEqual(
-      "Weight: 50 kg"
-    );
-
-    expect(wrapper.find("[data-test='height']").text()).toEqual(
-      "Height: 176 cm"
-    );
-
-    expect(wrapper.find("[data-test='date']").text()).toEqual(
-      "Date: 10/25/2019"
-    );
+    expect(screen.getByText("Bolt length: 3.50 inches")).toBeInTheDocument();
+    expect(screen.getByText("Diameter : 3/4 inches")).toBeInTheDocument();
+    expect(screen.getByText("Thickness of part 1 : 1.5 inches")).toBeInTheDocument();
+    expect(screen.getByText("Thickness of part 2: 0.75 inches")).toBeInTheDocument();
+    expect(screen.getByText("Date: 10/25/2019")).toBeInTheDocument();
   });
 
   it("should delete the card", () => {
-    wrapper.find("button").simulate("click");
-
-    expect(props.deleteCard).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button"));
+    expect(props.deleteCard).toHaveBeenCalledWith(props.id);
   });
 });

@@ -11,7 +11,7 @@ const Info = ({ diameter, thickness1, quantity1, thickness2, quantity2, flatWash
       <div className="card">
         <div className="card-content">
           <span className="card-title" data-test="length">
-            Bolts: {length}
+            Bolt length: {length} inches
           </span>
           <div className="card-data">
             <span data-test="diameter">Diameter : {diameter} inches</span>

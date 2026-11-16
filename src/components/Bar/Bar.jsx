@@ -1,83 +1,70 @@
 import React from 'react';
-import { Line} from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 import PropTypes from 'prop-types';
 
-const Bar = ({ labelData, bmiData }) => {
-  const data = canvas => {
-    const ctx = canvas.getContext('2d');
-    const gradient = ctx.createLinearGradient(63, 81, 181, 700);
-    gradient.addColorStop(0, '#929dd9');
-    gradient.addColorStop(1, '#172b4d');
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
-    return {
-      labels: labelData,
-      datasets: [
-        {
-          label: 'Bolts',
-          data: bmiData,
-          backgroundColor: gradient,
-          borderColor: '#3F51B5',
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointHoverBorderColor: 'white',
-          pointHoverBorderWidth: 2
-        }
-      ]
-    };
+const Bar = ({ labelData, bmiData }) => {
+  const data = {
+    labels: labelData,
+    datasets: [
+      {
+        label: 'Bolts',
+        data: bmiData,
+        fill: true,
+        backgroundColor: (context) => {
+          const { ctx, chartArea } = context.chart;
+          if (!chartArea) return '#929dd9';
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, '#929dd9');
+          gradient.addColorStop(1, '#172b4d');
+          return gradient;
+        },
+        borderColor: '#3F51B5',
+        pointRadius: 6,
+        pointHoverRadius: 8,
+        pointHoverBorderColor: 'white',
+        pointHoverBorderWidth: 2
+      }
+    ]
   };
+
+  const axis = (label, extraTicks = {}) => ({
+    title: {
+      display: true,
+      text: label,
+      font: { size: 18 },
+      color: 'white'
+    },
+    grid: { display: false, color: 'white' },
+    ticks: { color: 'white', font: { size: 16 }, ...extraTicks }
+  });
 
   const options = {
     responsive: true,
     scales: {
-      xAxes: [
-        {
-          scaleLabel: {
-            display: true,
-            labelString: 'Date',
-            fontSize: 18,
-            fontColor: 'white'
-          },
-          gridLines: {
-            display: false,
-            color: 'white'
-          },
-          ticks: {
-            fontColor: 'white',
-            fontSize: 16
-          }
-        }
-      ],
-      yAxes: [
-        {
-          scaleLabel: {
-            display: true,
-            labelString: 'Bolts lenghts',
-            fontSize: 18,
-            fontColor: 'white'
-          },
-          gridLines: {
-            display: false,
-            color: 'white'
-          },
-          ticks: {
-            fontColor: 'white',
-            fontSize: 16,
-            beginAtZero: true
-          }
-        }
-      ]
+      x: axis('Date'),
+      y: { ...axis('Bolt lengths'), beginAtZero: true }
     },
-    tooltips: {
-      titleFontSize: 13,
-      bodyFontSize: 13
+    plugins: {
+      tooltip: {
+        titleFont: { size: 13 },
+        bodyFont: { size: 13 }
+      }
     }
   };
 
-  return (
-    <>
-      <Line data={data} options={options} />
-    </>
-  );
+  return <Line data={data} options={options} />;
 };
 
 Bar.propTypes = {
