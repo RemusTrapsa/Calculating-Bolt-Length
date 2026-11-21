@@ -4,24 +4,17 @@
   "private": true,
   "homepage": "https://remustrapsa.github.io/Calculating-Bolt-Length",
   "dependencies": {
-    "@syncfusion/ej2-react-dropdowns": "^27.2.5",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "chart.js": "^4.4.7",
-    "classnames": "^2.5.1",
-    "cra-template-typescript": "1.2.0",
     "materialize-css": "^1.0.0-rc.2",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
-    "save": "^2.9.0",
     "typescript": "^4.9.5",
-    "uuid": "^8.3.2",
-    "web-vitals": "^4.2.4"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -50,7 +43,6 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.3.1",
-    "@types/uuid": "^8.3.4",
-    "sass": "^1.82.0"
+    "@types/uuid": "^8.3.4"
   }
 }

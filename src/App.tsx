@@ -1,91 +1,89 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import InputForm from "./components/InputForm/InputForm";
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import 'materialize-css/dist/css/materialize.min.css';
-import { getData, storeData } from './helpers/localStorage';
+import './App.css';
+import InputForm from './components/InputForm/InputForm';
 import Info from './components/Info/Info';
+import { getData, storeData } from './helpers/localStorage';
+
+const MAX_ENTRIES = 7;
+
+// Allowance added for the nut and thread, by bolt diameter (inches).
+const DIAMETER_ALLOWANCE: Record<string, number> = {
+  '1/2': 0.6875,
+  '5/8': 0.875,
+  '3/4': 1,
+  '7/8': 1.125,
+  '1': 1.25
+};
+
+const roundUp = (value: number, increment: number) =>
+  Math.ceil(value / increment) * increment;
+
+const product = (a: string, b: string) => Number(a || 0) * Number(b || 0);
 
 export default function App() {
-const initialState = () => getData('data') || [];
-const [state, setState] = useState(initialState);
+  const [entries, setEntries] = useState<any[]>(() => getData('data') || []);
 
-useEffect(() => {
-storeData('data', state);
-}, [state]);
+  useEffect(() => {
+    storeData('data', entries);
+  }, [entries]);
 
-function roundNum(value: number, increment: number) {
-return Math.ceil(value / increment) * increment;
-}
+  const handleCalculate = (values: any) => {
+    const allowance = DIAMETER_ALLOWANCE[values.diameter];
 
-const handleChange = (val: any) => {
-const diam: Record<string, number> = {
-"1/2": 0.6875,
-"5/8": 0.875,
-"3/4": 1,
-"7/8": 1.125,
-"1": 1.25
-};
+    if (allowance === undefined) {
+      alert('Please select a valid diameter.');
+      return;
+    }
 
-const d1 = diam[val.diameter];
+    const total =
+      product(values.thickness1, values.quantity1) +
+      product(values.thickness2, values.quantity2) +
+      product(values.flatWasher, values.quantity3) +
+      product(values.bevelWasher, values.quantity4) +
+      allowance;
 
-if (d1 === undefined) {
-alert("Please select a valid diameter.");
-return;
-}
+    const entry = {
+      ...values,
+      length: roundUp(total, 0.25).toFixed(2),
+      id: uuidv4()
+    };
 
-const total =
-Number(val.thickness1 || 0) * Number(val.quantity1 || 0) +
-Number(val.thickness2 || 0) * Number(val.quantity2 || 0) +
-Number(val.flatWasher || 0) * Number(val.quantity3 || 0) +
-Number(val.bevelWasher || 0) * Number(val.quantity4 || 0) +
-d1;
+    setEntries([...entries, entry].slice(-MAX_ENTRIES));
+  };
 
-const newVal = {
-...val,
-length: roundNum(total, 0.25).toFixed(2),
-id: uuidv4()
-};
+  const handleDelete = (id: string) => {
+    storeData('lastState', entries);
+    setEntries(entries.filter((entry) => entry.id !== id));
+  };
 
-let updated = [...state, newVal];
-if (updated.length > 7) updated = updated.slice(1);
+  const handleUndo = () => {
+    const last = getData('lastState');
+    if (last) setEntries(last);
+  };
 
-setState(updated);
-};
+  return (
+    <div className="container">
+      <h3>Bolt Length Calculator</h3>
 
-const handleDelete = (id: string) => {
-storeData('lastState', state);
-setState(state.filter((i: any) => i.id !== id));
-};
+      <InputForm change={handleCalculate} />
 
-const handleUndo = () => {
-const last = getData('lastState');
-if (last) setState(last);
-};
+      <h5>7 Day Data</h5>
 
-return (
-<div className="container">
-<h3>Bolt Length Calculator</h3>
+      {entries.length > 0 ? (
+        entries.map((entry) => (
+          <Info key={entry.id} {...entry} deleteCard={handleDelete} />
+        ))
+      ) : (
+        <p>No log found</p>
+      )}
 
-<InputForm change={handleChange} />
-
-<h5>7 Day Data</h5>
-
-{state.length > 0 ? (
-<>
-{state.map((info: any) => (
-<Info key={info.id} {...info} deleteCard={handleDelete} />
-))}
-</>
-) : (
-<p>No log found</p>
-)}
-
-{getData('lastState') !== null && (
-<button className="btn" onClick={handleUndo}>
-Undo
-</button>
-)}
-</div>
-);
+      {getData('lastState') !== null && (
+        <button className="btn" onClick={handleUndo}>
+          Undo
+        </button>
+      )}
+    </div>
+  );
 }

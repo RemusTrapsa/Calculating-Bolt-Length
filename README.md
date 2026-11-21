@@ -78,7 +78,6 @@ src/
   components/
     InputForm/InputForm.jsx   Input form for thicknesses, washers and diameter
     Info/Info.jsx             Card that shows one calculated result
-    Bar/Bar.jsx               Line chart of results (not used in the app yet)
   helpers/localStorage.js     Saves and loads data in the browser's localStorage
 ```
 
